@@ -12,7 +12,6 @@ client = discord.Client()
 async def on_ready():
     print(f'{client.user} is now online!')
 
-
 @client.event
 async def on_message(message):
     if message.content.startswith('!reminder ') or message.content.startswith('!remind '):

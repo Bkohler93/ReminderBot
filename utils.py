@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
+from pytz import timezone, utc
 import re
 
 def setRemindTime(times):
-    now = datetime.now()
-
+    now = getTime('US/Mountain')
     for t in times:
         timeUnit = re.search('[ymwdhMs]', t).group()
         amount = int(re.search("[1-9][0-9]*", t).group())
@@ -24,5 +24,14 @@ def setRemindTime(times):
             now += timedelta(seconds=amount)
 
     remindTime = now.replace(microsecond=0)
-
     return remindTime
+
+def getTime(tzone):
+  now = datetime.now(tz=utc)
+  now = now.astimezone(timezone(tzone))
+  return now
+
+def formatTime(time):
+  timeFormatted = time.strftime("%Y-%m-%d %H:%M:%S")
+
+  return timeFormatted
