@@ -2,8 +2,10 @@ from datetime import datetime, timedelta
 from pytz import timezone, utc
 import re
 
+DEFAULT_TIMEZONE = 'US/Mountain'
+
 def setRemindTime(times):
-    now = getTime('US/Mountain')
+    now = getTime(DEFAULT_TIMEZONE)
     for t in times:
         timeUnit = re.search('[ymwdhMs]', t).group()
         amount = int(re.search("[1-9][0-9]*", t).group())

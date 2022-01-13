@@ -1,6 +1,6 @@
 import discord
 import os
-from commands import createReminder, listUserReminders
+from commands import COMMAND_LIST
 from keep_alive import keep_alive
 from routines import ReminderBot
 
@@ -14,10 +14,9 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.content.startswith('!reminder ') or message.content.startswith('!remind '):
-        await createReminder(message)
-    elif message.content == '!reminders':
-        await listUserReminders(message)
+    command = COMMAND_LIST.match(message.content)
+    if command:
+        await command.exec(message)
 
 client.loop.create_task(ReminderBot(client))
 
