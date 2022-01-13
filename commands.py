@@ -3,6 +3,43 @@ from utils import setRemindTime
 from db import database, Reminder
 from discord import Embed
 
+class Command:
+    def __init__(self, prefix="!", value="", fnc=None):
+        self.prefix = prefix
+        self.value = value
+        self.exec = fnc
+
+    @property
+    def is_valid(self):
+        if self.prefix and self.exec and (self.value and self.value.strip() != ""):
+            return True
+
+        return False
+
+class CommandList:
+    def __init__(self, commands=[]):
+        self.commands = commands
+
+    @property
+    def valid_commands(self):
+        valid_commands = []
+
+        for command in self.commands:
+            if command.is_valid:
+                valid_commands.append(command)
+
+        return valid_commands
+
+    def match(self, text=""):
+        matched = None
+
+        for command in self.valid_commands:
+            if command.text == text:
+                matched = command
+                break
+
+        return matched
+
 async def createReminder(message):
   times = re.findall("[1-9][0-9]*[ymwdhMs]+", message.content)
 
@@ -47,3 +84,10 @@ async def listUserReminders(message):
   
   await message.channel.send(embed = embedVar)
   
+COMMAND_LIST = CommandList(
+    [
+        Command("reminder", createReminder),
+        Command("remind", createReminder),
+        Command("reminders", listUserReminders),
+    ]
+)
