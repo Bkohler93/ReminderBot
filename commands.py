@@ -2,19 +2,20 @@ import re
 from utils import setRemindTime
 from db import setReminder, getUserReminders
 from discord import Embed
+import asyncio
 
 async def createReminder(message):
   times = re.findall("[1-9][0-9]*[ymwdhMs]+", message.content)
 
-  if len(times) < 1:
-    msg = "Invalid format. Use '!reminder [time until reminder] [message]'\nHere is an example to set a reminder for 3 hours and 15 minutes from now.\n!reminder 3h15m hello world"
+  textMessage = ' '.join(message.content.split()[2:])
+
+  if len(times) < 1 or len(textMessage) > 256:
+    msg = "Invalid format. Maximum of 256 characters. Use '!reminder [time until reminder] [message]'\nHere is an example to set a reminder for 3 hours and 15 minutes from now.\n!reminder 3h15m hello world"
 
     await message.author.send(msg)
     
     return
 
-  textMessage = ' '.join(
-  message.content.split()[2:])
   remindTime = setRemindTime(times)
   formattedTime = remindTime.strftime("%Y-%m-%d %H:%M:%S")
   
@@ -32,7 +33,11 @@ async def listUserReminders(message):
   timeStampText = ""
   
   for reminder in reminders:
-    reminderText += f"{reminder['message']}\n"
+
+    if len(reminder['message']) > 56:
+      reminderText += f"{reminder['message'][:59]}...\n"
+    else:
+      reminderText += f"{reminder['message']}\n"
     timeStampText += f"{reminder['time']}\n"
 
   if (len(reminderText) > 0):
@@ -40,4 +45,11 @@ async def listUserReminders(message):
     embedVar.add_field(name="Created At", value=timeStampText, inline=True)
   
   await message.channel.send(embed = embedVar)
+  
+
+async def lolMessage(message):
+
+  tts = await message.channel.send("loll penis", tts=True)
+  await asyncio.sleep(1.5);
+  await tts.delete();
   
