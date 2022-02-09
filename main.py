@@ -1,6 +1,6 @@
 import discord
 import os
-from commands import createReminder, listUserReminders, lolMessage
+from commands import createReminder, listUserReminders
 from keep_alive import keep_alive
 from routines import ReminderBot
 
@@ -18,8 +18,6 @@ async def on_message(message):
         await createReminder(message)
     elif message.content == '!reminders':
         await listUserReminders(message)
-    elif "penis" in message.content.lower() and message.author.bot != True:
-        await lolMessage(message)
 
 client.loop.create_task(ReminderBot(client))
 

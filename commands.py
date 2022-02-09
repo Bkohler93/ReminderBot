@@ -45,11 +45,3 @@ async def listUserReminders(message):
     embedVar.add_field(name="Created At", value=timeStampText, inline=True)
   
   await message.channel.send(embed = embedVar)
-  
-
-async def lolMessage(message):
-
-  tts = await message.channel.send("loll penis", tts=True)
-  await asyncio.sleep(1.5);
-  await tts.delete();
-  
